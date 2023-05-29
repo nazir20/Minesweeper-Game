@@ -2,6 +2,7 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from utils import *
+from minesweeper import Cell
 
 
 # window setup
@@ -27,18 +28,34 @@ header_title.place(relx=0.5, rely=0.5, anchor='center')
 
 
 # window main setup
+main = Frame(window, bg=WINDOW_BG, width=calculate_percentage('w', 75), height=calculate_percentage('h', 80))
+main.place(x=calculate_percentage('w', 25), y=calculate_percentage('h', 25))
+
+
 def start_game():
+    # Disabling the startButton
     startButton.config(state=DISABLED)
     endButton.config(state=NORMAL)
-    # this part will be updated...
-    print('Game started!')
+    # generating the game board
+    for row in range(GRID):
+        for col in range(GRID):
+            new_cell = Cell(row, col)
+            new_cell.generate_btn(main)
+            new_cell.cell_btn.grid(row=row, column=col)
+
+    # setting is_mine to True for randomly picked cells
+    Cell.generate_mines()
+    for i in Cell.cells:
+        print(i)
+
+    # changing the title of the game in case the player win the game
+    if Cell.game_over:
+        header_title.config(text='You Win the Game!')
 
 
 def end_game():
     startButton.config(state=NORMAL)
     endButton.config(state=DISABLED)
-    # this part will be updated...
-    print('Game end!')
 
 
 # window sidebar setup
